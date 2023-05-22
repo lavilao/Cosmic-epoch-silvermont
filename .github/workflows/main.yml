@@ -15,7 +15,7 @@ jobs:
       id: makepkg
       uses: CachyOS/pkgbuild-action@master
       with:
-        envvars: CFLAGS="-march=silvermont -O3 -pipe -fgraphite-identity -floop-strip-mine -floop-nest-optimize -fno-semantic-interposition -fipa-pta -flto -fdevirtualize-at-ltrans -flto-partition=one" CXXFLAGS="${CFLAGS}" CMAKE_C_COMPILER="command gcc $CFLAGS" CMAKE_LINKER="command ld $LDFLAGS" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,now ${CFLAGS}"
+        envvars: CFLAGS="-march=silvermont -O3 -pipe"
         pkgdir: "./"
         namcapExcludeRules: "invalidstartdir"
         makepkgArgs: "--skipchecksums --skippgpcheck --noconfirm -s"
