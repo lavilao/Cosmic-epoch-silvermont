@@ -15,7 +15,7 @@ jobs:
       id: makepkg
       uses: CachyOS/pkgbuild-action@master
       with:
-        envvars: CFLAGS="-march=silvermont -O3 -pipe"
+        envvars: CFLAGS="-march=silvermont -pipe"
         pkgdir: "./"
         namcapExcludeRules: "invalidstartdir"
         makepkgArgs: "--skipchecksums --skippgpcheck --noconfirm -s"
