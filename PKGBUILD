@@ -3,9 +3,9 @@
 # Co-Maintainer: Mark Wagie <mark dot wagie at tutanota dot com>
 
 pkgname=cosmic-epoch-git
-pkgver=r66.0ffc5ae
+pkgver=r70.0db4e9c
 pkgrel=1
-pkgdesc="desktop environment in Rust, Iced. GNOME inspired, by System76, Pop! OS."
+pkgdesc="Cosmic desktop environment from System76's Pop!_OS written in Rust utilizing Iced inspired by GNOME"
 arch=('x86_64' 'aarch64')
 url="https://github.com/pop-os/cosmic-epoch"
 license=('GPL3')
@@ -81,6 +81,7 @@ prepare() {
     git -c protocol.file.allow=always submodule update "${submodule#*::}"
   done
 
+  export CARGO_HOME="$srcdir/cargo-home"
   export RUSTUP_TOOLCHAIN=stable
   for submodule in "${_submodules[@]}"; do
     pushd "${submodule#*::}"
@@ -101,6 +102,7 @@ prepare() {
 
 build() {
   cd "$srcdir/cosmic-epoch"
+  export CARGO_HOME="$srcdir/cargo-home"
   export RUSTUP_TOOLCHAIN=stable
   # note, consider rust build time optimisations: 
   # https://matklad.github.io/2021/09/04/fast-rust-builds.html, 
@@ -116,8 +118,9 @@ check() {
   appstream-util validate-relax --nonet cosmic-sysext/usr/share/metainfo/*.metainfo.xml || :
   desktop-file-validate cosmic-sysext/usr/share/applications/*.desktop || :
 
+#  export CARGO_HOME="$srcdir/cargo-home"
 #  export RUSTUP_TOOLCHAIN=stable
-#  for p in cosmic-applibrary cosmic-bg cosmic-settings do;
+#  for p in cosmic-applibrary cosmic-settings do;
 #    pushd ${p}
 #    nice just test
 #    popd
