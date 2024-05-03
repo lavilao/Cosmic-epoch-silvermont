@@ -8,18 +8,18 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: archlinux/base:latest
     
     steps:
     - uses: actions/checkout@v2
     
     - name: Install dependencies
       run: |
-        sudo pacman -Sy --noconfirm git base-devel
+        pacman -Sy --noconfirm git base-devel
         
     - name: Build package
       run: |
-        git clone https://aur.archlinux.org/packages/cosmic-epoch-git.git
+        git clone https://aur.archlinux.org/PACKAGE_NAME.git
         cd PACKAGE_NAME
         makepkg -si --noconfirm
         
