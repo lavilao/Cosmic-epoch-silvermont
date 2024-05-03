@@ -1,24 +1,45 @@
-name: Build and lint
+name: Build and Release
+
 on:
   push:
-    paths:
-      - 'PKGBUILD'
-      - '.github/workflows/main.yml'
-  workflow_dispatch:
+    branches:
+      - main
+
 jobs:
-  cosmic-epoch-git:
+
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Build (GCC)
-      id: makepkg
-      uses: CachyOS/pkgbuild-action@master
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        sudo pacman -Sy --noconfirm git base-devel
+        
+    - name: Build package
+      run: |
+        git clone https://aur.archlinux.org/packages/cosmic-epoch-git.git
+        cd PACKAGE_NAME
+        makepkg -si --noconfirm
+        
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        envvars: CFLAGS="-march=silvermont -pipe"
-        pkgdir: "./"
-        namcapExcludeRules: "invalidstartdir"
-        makepkgArgs: "--skipchecksums --skippgpcheck --noconfirm -s"
-    - uses: actions/upload-artifact@v3
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        
+    - name: Upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        path: "./*.zst"
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./PACKAGE_NAME/*.pkg.tar.zst
+        asset_name: PACKAGE_NAME.pkg.tar.zst
+        asset_content_type: application/octet-stream
