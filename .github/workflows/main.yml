@@ -8,7 +8,7 @@ on:
 jobs:
 
   build:
-    runs-on: archlinux/base:latest
+    runs-on: arch-latest
     
     steps:
     - uses: actions/checkout@v2
