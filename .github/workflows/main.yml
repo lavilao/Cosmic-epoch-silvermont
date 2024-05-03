@@ -19,7 +19,7 @@ jobs:
         
     - name: Build package
       run: |
-        git clone https://aur.archlinux.org/PACKAGE_NAME.git
+        git clone https://aur.archlinux.org/packages/cosmic-epoch-git.git
         cd PACKAGE_NAME
         makepkg -si --noconfirm
         
